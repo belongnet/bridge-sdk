@@ -1,0 +1,39 @@
+{
+  "name": "@belongnet/bridge-sdk",
+  "version": "0.1.0",
+  "description": "Type-safe iframe ↔ host bridge for Belong apps",
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "belong",
+    "iframe",
+    "bridge",
+    "penpal",
+    "sdk"
+  ],
+  "author": "Belong",
+  "license": "MIT",
+  "dependencies": {
+    "penpal": "^7.0.4",
+    "zod": "^4.2.1"
+  },
+  "devDependencies": {
+    "tsdown": "^0.19.0",
+    "typescript": "^5.9.3"
+  }
+}
