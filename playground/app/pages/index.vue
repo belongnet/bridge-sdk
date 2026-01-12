@@ -11,7 +11,7 @@ const hostForm = ref({
 })
 const paramsOpen = ref<Record<string, boolean>>({})
 const config = useRuntimeConfig()
-const frameSrc = computed(() => `${config.app.baseURL}`)
+const frameSrc = computed(() => `${config.app.baseURL}frame`)
 
 let connection: Awaited<ReturnType<typeof connectHost>> | null = null
 const toast = useToast()
