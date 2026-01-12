@@ -7,9 +7,11 @@ const status = ref<'idle' | 'connecting' | 'connected' | 'serving' | 'error'>('i
 const errorMessage = ref<string | null>(null)
 const frameTheme = ref<ThemeMode>('light')
 const hostForm = ref({
-  theme: 'light' as ThemeMode,
+  theme: 'light' as ThemeMode
 })
 const paramsOpen = ref<Record<string, boolean>>({})
+const config = useRuntimeConfig()
+const frameSrc = computed(() => `${config.app.baseURL}`)
 
 let connection: Awaited<ReturnType<typeof connectHost>> | null = null
 const toast = useToast()
@@ -44,17 +46,17 @@ const hostMethods = computed(() => [
         key: 'theme',
         label: 'theme',
         type: 'select',
-        options: ['light', 'dark'],
-      },
+        options: ['light', 'dark']
+      }
     ],
-    call: sendTheme,
-  },
+    call: sendTheme
+  }
 ])
 
 const toggleParams = (key: string) => {
   paramsOpen.value = {
     ...paramsOpen.value,
-    [key]: !paramsOpen.value[key],
+    [key]: !paramsOpen.value[key]
   }
 }
 
@@ -114,57 +116,59 @@ onBeforeUnmount(() => {
 
     <div class="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
       <div class="text-xs text-muted">
-        <div class="text-[10px] uppercase text-muted">App Methods</div>
+        <div class="text-[10px] uppercase text-muted">
+          App Methods
+        </div>
         <div class="mt-3 space-y-3">
           <div class="max-w-md">
-          <FunctionItem
-            v-for="method in hostMethods"
-            :key="method.key"
-            :label="method.label"
-            :description="method.description"
-            :disabled="status !== 'connected' && status !== 'serving'"
-            @call="method.call"
-          >
-            <template #actions>
-              <UButton
-                v-if="method.args?.length"
-                icon="i-lucide-settings"
-                color="neutral"
-                variant="ghost"
-                size="xs"
-                aria-label="Parameters"
-                :ui="{ base: 'hover:bg-transparent text-muted hover:text-default' }"
-                @click="toggleParams(method.key)"
-              />
-            </template>
-            <UCollapsible
-              v-if="method.args?.length"
-              v-model:open="paramsOpen[method.key]"
-              class="flex flex-col gap-2"
+            <FunctionItem
+              v-for="method in hostMethods"
+              :key="method.key"
+              :label="method.label"
+              :description="method.description"
+              :disabled="status !== 'connected' && status !== 'serving'"
+              @call="method.call"
             >
-              <template #content>
-                <div class="mt-3 rounded-lg border border-default p-3">
-                  <div class="grid gap-2">
-                    <div
-                      v-for="arg in method.args"
-                      :key="arg.key"
-                      class="grid gap-1"
-                    >
-                      <label class="text-[11px] uppercase text-muted">{{ arg.label }}</label>
-                      <USelect
-                        v-if="arg.type === 'select'"
-                        v-model="hostForm[arg.key as 'theme']"
-                        :items="arg.options"
-                        size="xs"
-                      />
+              <template #actions>
+                <UButton
+                  v-if="method.args?.length"
+                  icon="i-lucide-settings"
+                  color="neutral"
+                  variant="ghost"
+                  size="xs"
+                  aria-label="Parameters"
+                  :ui="{ base: 'hover:bg-transparent text-muted hover:text-default' }"
+                  @click="toggleParams(method.key)"
+                />
+              </template>
+              <UCollapsible
+                v-if="method.args?.length"
+                v-model:open="paramsOpen[method.key]"
+                class="flex flex-col gap-2"
+              >
+                <template #content>
+                  <div class="mt-3 rounded-lg border border-default p-3">
+                    <div class="grid gap-2">
+                      <div
+                        v-for="arg in method.args"
+                        :key="arg.key"
+                        class="grid gap-1"
+                      >
+                        <label class="text-[11px] uppercase text-muted">{{ arg.label }}</label>
+                        <USelect
+                          v-if="arg.type === 'select'"
+                          v-model="hostForm[arg.key as 'theme']"
+                          :items="arg.options"
+                          size="xs"
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </template>
-            </UCollapsible>
-          </FunctionItem>
+                </template>
+              </UCollapsible>
+            </FunctionItem>
+          </div>
         </div>
-      </div>
       </div>
       <div class="overflow-hidden rounded-lg border border-default bg-default">
         <div class="border-b border-default px-4 py-2 text-[11px] uppercase tracking-[0.3em] text-muted">
@@ -173,7 +177,7 @@ onBeforeUnmount(() => {
         <ClientOnly>
           <iframe
             ref="iframeRef"
-            src="/frame"
+            :src="frameSrc"
             title="Bridge SDK Frame"
             class="h-[520px] w-full border-0 bg-default"
           />
