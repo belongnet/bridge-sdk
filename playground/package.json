@@ -11,11 +11,12 @@
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
+    "@belongnet/bridge-sdk": "workspace:*",
     "@iconify-json/lucide": "^1.2.82",
     "@iconify-json/simple-icons": "^1.2.63",
     "@nuxt/ui": "^4.3.0",
     "nuxt": "^4.2.2",
-    "@belongnet/bridge-sdk": "workspace:*"
+    "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.12.1",
