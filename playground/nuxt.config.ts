@@ -11,11 +11,14 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true
   },
-  app: {
-    baseURL: '/'
-  },
 
   css: ['~/assets/css/main.css'],
+
+  runtimeConfig: {
+    app: {
+      baseURL: '/'
+    }
+  },
 
   compatibilityDate: '2025-01-15',
 
