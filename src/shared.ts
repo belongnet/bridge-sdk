@@ -14,7 +14,7 @@ export const locationSchema = z.object({
 export type LocationPayload = z.infer<typeof locationSchema>
 
 export const toastSchema = z.object({
-  msg: z.string().min(1),
+  message: z.string().min(1),
   icon: z.string().optional(),
   type: z.enum(['error', 'success']),
 })
@@ -31,9 +31,12 @@ export interface HostBridgeMethods extends Methods {
 
 /**
  * Contract for methods that the iframe exposes to the host.
- * Currently empty but intentionally structured for future expansion.
  */
-export interface FrameBridgeMethods extends Methods {}
+export type ThemeMode = 'light' | 'dark'
+
+export interface FrameBridgeMethods extends Methods {
+  setTheme(theme: ThemeMode): Promise<void>
+}
 
 export type HostRemote = HostBridgeMethods
 export type FrameRemote = FrameBridgeMethods

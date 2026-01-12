@@ -21,11 +21,11 @@ const footerItems = ref([
 </script>
 
 <template>
-  <div class="bg-white text-slate-900">
-    <UHeader class="border-b border-slate-200 bg-white">
+  <div class="bg-default text-default">
+    <UHeader class="border-b border-default bg-default">
       <template #left>
         <div class="flex items-center gap-3">
-          <div class="text-sm font-semibold text-slate-900">
+          <div class="text-sm font-semibold text-default">
              <NuxtLink
               to="https://github.com/belongnet/bridge"
               target="_blank"
