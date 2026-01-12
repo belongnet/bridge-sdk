@@ -5,6 +5,7 @@ import {
   type HostBridgeMethods,
   type HostRemote,
   locationSchema,
+  toastSchema,
   normalizeAllowedOrigins,
 } from './shared'
 
@@ -81,6 +82,10 @@ const createHostRemote = (remote: RemoteProxy<HostBridgeMethods>): HostRemote =>
   async getLocation() {
     const payload = await remote.getLocation()
     return locationSchema.parse(payload)
+  },
+  async showToast(payload) {
+    const parsed = toastSchema.parse(payload)
+    await remote.showToast(parsed)
   },
 })
 

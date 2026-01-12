@@ -13,11 +13,20 @@ export const locationSchema = z.object({
 
 export type LocationPayload = z.infer<typeof locationSchema>
 
+export const toastSchema = z.object({
+  msg: z.string().min(1),
+  icon: z.string().optional(),
+  type: z.enum(['error', 'success']),
+})
+
+export type ToastPayload = z.infer<typeof toastSchema>
+
 /**
  * Contract that the native host must fulfil for iframe consumers.
  */
 export interface HostBridgeMethods extends Methods {
   getLocation(): Promise<LocationPayload>
+  showToast(payload: ToastPayload): Promise<void>
 }
 
 /**

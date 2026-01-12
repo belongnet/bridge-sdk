@@ -1,17 +1,17 @@
-# @belongnet/bridge-sdk
+# @belongnet/bridge-sdk-sdk
 
 Belong frame-to-app bridge — Typed messaging layer for native data between iframe's and Belong app.
 
 ## Installation
 
 ```sh
-pnpm add @belongnet/bridge
+pnpm add @belongnet/bridge-sdk
 ```
 
 ## Iframe usage
 
 ```ts
-import { connectToHost } from '@belongnet/bridge'
+import { connectToHost } from '@belongnet/bridge-sdk'
 
 const { remote, destroy } = await connectToHost({
   allowedOrigins: ['https://app.belong.net', 'capacitor://localhost'],
@@ -25,7 +25,7 @@ destroy() // optional cleanup
 ## Host usage
 
 ```ts
-import { connectHost } from '@belongnet/bridge'
+import { connectHost } from '@belongnet/bridge-sdk'
 
 const iframe = document.querySelector<HTMLIFrameElement>('#belong-frame')!
 

@@ -5,6 +5,7 @@ import {
   type FrameBridgeMethods,
   type HostBridgeMethods,
   locationSchema,
+  toastSchema,
   normalizeAllowedOrigins,
 } from './shared'
 
@@ -61,10 +62,18 @@ const createValidatedHostMethods = (methods: HostBridgeMethods): HostBridgeMetho
     throw new Error('Host methods must implement getLocation()')
   }
 
+  if (typeof methods?.showToast !== 'function') {
+    throw new Error('Host methods must implement showToast()')
+  }
+
   return {
     async getLocation() {
       const payload = await methods.getLocation()
       return locationSchema.parse(payload)
+    },
+    async showToast(payload) {
+      const parsed = toastSchema.parse(payload)
+      await methods.showToast(parsed)
     },
   }
 }
