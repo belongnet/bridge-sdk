@@ -35,7 +35,7 @@ jobs:
         run: cd playground && pnpm build
         env:
           NITRO_PRESET: github_pages
-          NUXT_APP_BASE_URL: /bridge-sdk-playground/
+          NUXT_APP_BASE_URL: /bridge-sdk/
           # other secrets
 
       - name: Upload artifact
