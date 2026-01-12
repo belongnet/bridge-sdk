@@ -12,6 +12,8 @@ const payload = ref<LocationPayload | null>(null)
 const isEmbedded = ref(false)
 const frameTheme = ref<ThemeMode>('light')
 const colorMode = useColorMode()
+const toast = useToast()
+const lastTheme = ref<ThemeMode>('light')
 
 const connection = shallowRef<Awaited<ReturnType<typeof connectToHost>> | null>(null)
 const toastForm = ref({
@@ -23,13 +25,31 @@ const toastForm = ref({
 const connect = async () => {
   status.value = 'connecting'
   errorMessage.value = null
+  payload.value = null
+  const timeoutId = window.setTimeout(() => {
+    if (status.value === 'connecting') {
+      status.value = 'error'
+      errorMessage.value = 'Connection timeout.'
+      connection.value?.destroy()
+      connection.value = null
+    }
+  }, 5000)
   try {
+    connection.value?.destroy()
+    connection.value = null
     connection.value = await connectToHost({
       allowedOrigins: [window.location.origin],
       methods: {
         async setTheme(theme) {
+          const previous = lastTheme.value
           frameTheme.value = theme
-          colorMode.value = theme
+          colorMode.preference = theme
+          lastTheme.value = theme
+          toast.add({
+            title: `State changed: ${previous} → ${theme}`,
+            color: theme === 'dark' ? 'neutral' : 'primary',
+            duration: 1000
+          })
         }
       }
     })
@@ -37,8 +57,11 @@ const connect = async () => {
   } catch (error) {
     status.value = 'error'
     errorMessage.value = error instanceof Error ? error.message : 'Could not connect to the host.'
+  } finally {
+    window.clearTimeout(timeoutId)
   }
 }
+
 
 const requestLocation = async () => {
   if (!connection.value) return
@@ -139,9 +162,9 @@ onBeforeUnmount(() => {
     <div class="flex items-center gap-2">
       <span class="text-sm text-default">Frame status:</span>
       <UBadge
-        :color="status === 'ready' ? 'success' : status === 'error' ? 'error' : 'neutral'"
+        :color="status === 'ready' ? 'success' : status === 'error' ? 'error' : status === 'connecting' ? 'warning' : 'neutral'"
         variant="subtle"
-        :icon="status === 'ready' ? 'i-lucide-check-circle' : status === 'error' ? 'i-lucide-x-circle' : 'i-lucide-circle'"
+        :icon="status === 'connected' || status === 'serving' ? 'i-lucide-check-circle' : status === 'error' ? 'i-lucide-x-circle' : 'i-lucide-circle'"
       >
         {{ status }}
       </UBadge>
@@ -227,8 +250,8 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <div class="mt-4 rounded-xl bg-muted px-4 py-3 text-xs text-default">
-      <pre class="whitespace-pre-wrap">{{ payload ? JSON.stringify(payload, null, 2) : '{ }' }}</pre>
+    <div v-if="payload" class="mt-4 rounded-xl bg-muted px-4 py-3 text-xs text-default">
+      <pre class="whitespace-pre-wrap">{{ JSON.stringify(payload, null, 2) }}</pre>
     </div>
 
     <p

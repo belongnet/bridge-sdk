@@ -22,30 +22,15 @@ const footerItems = ref([
 
 <template>
   <div class="bg-default text-default">
-    <UHeader class="border-b border-default bg-default">
-      <template #left>
-        <div class="flex items-center gap-3">
-          <div class="text-sm font-semibold text-default">
-             <NuxtLink
-              to="https://github.com/belongnet/bridge"
-              target="_blank"
-              class="underline"
-            >@belongnet/bridge</NuxtLink> - Playground
-          </div>
-        </div>
-      </template>
-
-      <template #right>
-        <UButton
-          to="https://github.com/belongnet/bridge"
+    <div class="py-4 px-6">
+      <h1 class="font-semibold text-default text-center">
+        <NuxtLink
+          to="https://github.com/belongnet/bridge-sdk"
           target="_blank"
-          icon="i-simple-icons-github"
-          aria-label="GitHub"
-          color="neutral"
-          variant="ghost"
-        />
-      </template>
-    </UHeader>
+          class="underline"
+        >@belongnet/bridge-sdk</NuxtLink> - Playground
+      </h1>
+    </div>
 
     <UContainer
       as="main"
@@ -64,7 +49,7 @@ const footerItems = ref([
           {{ new Date().getFullYear() }} &copy; Belong.net
         </template>
         <template #cm>
-          <ColorModeButton />
+          <UColorModeSwitch />
         </template>
       </UNavigationMenu>
     </footer>

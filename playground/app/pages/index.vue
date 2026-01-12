@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { connectHost, type LocationPayload, type ToastPayload, type ThemeMode } from '@belongnet/bridge-sdk'
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 const iframeRef = ref<HTMLIFrameElement | null>(null)
 const status = ref<'idle' | 'connecting' | 'connected' | 'serving' | 'error'>('idle')
@@ -12,6 +12,7 @@ const hostForm = ref({
 const paramsOpen = ref<Record<string, boolean>>({})
 const config = useRuntimeConfig()
 const frameSrc = computed(() => `${config.app.baseURL}frame`)
+const colorMode = useColorMode()
 
 let connection: Awaited<ReturnType<typeof connectHost>> | null = null
 const toast = useToast()
@@ -26,11 +27,12 @@ const readLocation = async (): Promise<LocationPayload> => {
   return payload
 }
 
-const sendTheme = async () => {
+const sendTheme = async (nextTheme?: ThemeMode) => {
   if (!connection) return
+  const resolvedTheme = nextTheme ?? hostForm.value.theme
   try {
-    await connection.remote.setTheme(hostForm.value.theme)
-    frameTheme.value = hostForm.value.theme
+    await connection.remote.setTheme(resolvedTheme)
+    frameTheme.value = resolvedTheme
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'Failed to send theme to the frame.'
   }
@@ -95,6 +97,16 @@ onMounted(async () => {
     errorMessage.value = error instanceof Error ? error.message : 'Failed to connect to the frame.'
   }
 })
+
+watch(
+  () => colorMode.preference,
+  (value) => {
+    if (value === 'light' || value === 'dark') {
+      hostForm.value.theme = value
+      void sendTheme(value)
+    }
+  }
+)
 
 onBeforeUnmount(() => {
   connection?.destroy()
@@ -171,8 +183,17 @@ onBeforeUnmount(() => {
         </div>
       </div>
       <div class="overflow-hidden rounded-lg border border-default bg-default">
-        <div class="border-b border-default px-4 py-2 text-[11px] uppercase tracking-[0.3em] text-muted">
-          iframe
+        <div class="flex items-center justify-between border-b border-default px-4 py-2 text-[11px] uppercase tracking-[0.3em] text-muted">
+          <span>iframe</span>
+          <UButton
+            size="xs"
+            color="neutral"
+            variant="ghost"
+            icon="i-lucide-rotate-cw"
+            aria-label="Reload iframe"
+            :ui="{ base: 'text-muted hover:text-default' }"
+            @click="iframeRef?.contentWindow?.location?.reload()"
+          />
         </div>
         <ClientOnly>
           <iframe
