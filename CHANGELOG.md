@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v0.1.6
+
+
+### 🏡 Chore
+
+- **release:** V0.1.5 ([53ae493](https://github.com/belongnet/bridge-sdk/commit/53ae493))
+
+### ❤️ Contributors
+
+- GitHub Actions ([@betterqualityassuranceuser](https://github.com/betterqualityassuranceuser))
+
 ## v0.1.5
 
 
