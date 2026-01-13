@@ -1,6 +1,6 @@
 {
   "name": "@belongnet/bridge-sdk",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Type-safe iframe ↔ host bridge for Belong apps",
   "type": "module",
   "main": "./dist/index.mjs",

@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v0.1.5
+
+
+### 🏡 Chore
+
+- Try use write permissions ([05b4140](https://github.com/belongnet/bridge-sdk/commit/05b4140))
+
+### ❤️ Contributors
+
+- Reslear ([@reslear](https://github.com/reslear))
+
 ## v0.1.4
 
 
