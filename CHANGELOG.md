@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v0.1.4
+
+
+### 🏡 Chore
+
+- **release:** V0.1.3 ([d7077ca](https://github.com/belongnet/bridge-sdk/commit/d7077ca))
+
+### ❤️ Contributors
+
+- GitHub Actions ([@betterqualityassuranceuser](https://github.com/betterqualityassuranceuser))
+
 ## v0.1.3
 
 
